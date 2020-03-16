@@ -44,7 +44,7 @@ from b2share.modules.deposit.errors import (DraftExistsVersioningError,
                                             RecordNotFoundVersioningError)
 from invenio_pidstore.models import PersistentIdentifier, PIDStatus
 from b2share.modules.records.providers import RecordUUIDProvider
-from invenio_pidrelations.contrib.versioning import PIDVersioning
+from invenio_pidrelations.contrib.versioning import PIDNodeVersioning
 from b2share.modules.schemas.api import CommunitySchema
 
 from b2share_unit_tests.helpers import authenticated_user, create_deposit, \
@@ -264,11 +264,11 @@ def filenames(record):
     return [f.key for f in record.files]
 
 def retrieve_version_master(child_pid):
-    """Retrieve the PIDVersioning from a child PID."""
+    """Retrieve the PIDNodeVersioning from a child PID."""
     if type(child_pid).__name__ == "FetchedPID":
         # when getting a pid-like object from elasticsearch
         child_pid = child_pid.provider.get(child_pid.pid_value).pid
-    parent_pid = PIDVersioning(child=child_pid).parent
+    parent_pid = PIDNodeVersioning(child=child_pid).parent
     if not parent_pid:
         return None
-    return PIDVersioning(parent=parent_pid)
+    return PIDNodeVersioning(parent=parent_pid)

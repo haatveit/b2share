@@ -32,7 +32,7 @@ import click
 from flask import current_app
 
 from invenio_db import db
-from invenio_pidrelations.contrib.versioning import PIDVersioning
+from invenio_pidrelations.contrib.versioning import PIDNodeVersioning
 from invenio_pidstore.models import PersistentIdentifier, PIDStatus
 from invenio_pidstore.errors import PIDDoesNotExistError
 from sqlalchemy.orm.exc import NoResultFound
@@ -132,7 +132,7 @@ def alembic_upgrade_database_data(alembic, verbose):
                 continue
             # Create parent version PID
             parent_pid = RecordUUIDProvider.create().pid
-            version_master = PIDVersioning(parent=parent_pid)
+            version_master = PIDNodeVersioning(parent=parent_pid)
             version_master.insert_draft_child(child=rec_pid)
             version_master.update_redirect()
             migrate_record_metadata(
@@ -161,12 +161,12 @@ def alembic_upgrade_database_data(alembic, verbose):
                     # Create parent version PID
                     parent_pid = RecordUUIDProvider.create().pid
                     assert parent_pid
-                    version_master = PIDVersioning(parent=parent_pid)
+                    version_master = PIDNodeVersioning(parent=parent_pid)
                     version_master.insert_draft_child(child=rec_pid)
                 else:
                     # Retrieve previously created version PID
                     rec_pid = RecordUUIDProvider.get(dep_pid.pid_value).pid
-                    version_master = PIDVersioning(child=rec_pid)
+                    version_master = PIDNodeVersioning(child=rec_pid)
                     parent_pid = version_master.parent
                     if not parent_pid:
                         click.secho('    record {} was deleted, but the deposit has not been removed'.format(rec_pid.pid_value), fg='red')

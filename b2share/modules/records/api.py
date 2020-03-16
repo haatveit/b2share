@@ -34,7 +34,7 @@ from invenio_records.api import Record
 from b2share.modules.deposit.providers import DepositUUIDProvider
 from b2share.modules.records.fetchers import b2share_record_uuid_fetcher
 from invenio_indexer.api import RecordIndexer
-from invenio_pidrelations.contrib.versioning import PIDVersioning
+from invenio_pidrelations.contrib.versioning import PIDNodeVersioning
 
 from invenio_records_files.api import Record, FilesIterator, FileObject
 from invenio_records_files.utils import sorted_files_from_bucket
@@ -112,7 +112,7 @@ class B2ShareRecord(Record):
         # via the trigger on record deletion.
         super(B2ShareRecord, self).delete()
 
-        version_master = PIDVersioning(child=pid)
+        version_master = PIDNodeVersioning(child=pid)
         # If the parent has no other children and no draft child
         # mark it as deleted
         if not version_master.children.all():

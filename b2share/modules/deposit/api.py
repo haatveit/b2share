@@ -46,7 +46,7 @@ from invenio_records_files.api import Record
 from invenio_records_files.models import RecordsBuckets
 from invenio_records.errors import MissingModelError
 from invenio_indexer.api import RecordIndexer
-from invenio_pidrelations.contrib.versioning import PIDVersioning
+from invenio_pidrelations.contrib.versioning import PIDNodeVersioning
 from invenio_pidstore.models import PersistentIdentifier, PIDStatus
 from invenio_pidstore.resolver import Resolver
 from invenio_pidstore.errors import PIDDoesNotExistError
@@ -162,7 +162,7 @@ class Deposit(InvenioDeposit):
     @property
     def versioning(self):
         """Return the parent versionning PID."""
-        return PIDVersioning(child=self.record_pid)
+        return PIDNodeVersioning(child=self.record_pid)
 
     @classmethod
     def create(cls, data, id_=None, version_of=None):
@@ -210,7 +210,7 @@ class Deposit(InvenioDeposit):
         else:
             # create parent PID
             parent_pid = RecordUUIDProvider.create().pid
-            version_master = PIDVersioning(parent=parent_pid)
+            version_master = PIDNodeVersioning(parent=parent_pid)
             version_master.insert_draft_child(child=rec_pid)
 
         # Mint the deposit with the parent PID
@@ -404,7 +404,7 @@ class Deposit(InvenioDeposit):
         deposit_pid = self.pid
         pid_value = deposit_pid.pid_value
         record_pid = RecordUUIDProvider.get(pid_value).pid
-        version_master = PIDVersioning(child=record_pid)
+        version_master = PIDNodeVersioning(child=record_pid)
         # every deposit has a parent version after the 2.1.0 upgrade
         # except deleted ones. We check the parent version in case of a delete
         # revert.
@@ -509,7 +509,7 @@ def create_b2safe_file(external_pids, bucket):
 
 
 def find_version_master_and_previous_record(version_of):
-    """Retrieve the PIDVersioning and previous record of a record PID.
+    """Retrieve the PIDNodeVersioning and previous record of a record PID.
 
     :params version_of: record PID.
     """
@@ -520,7 +520,7 @@ def find_version_master_and_previous_record(version_of):
     except PIDDoesNotExistError as e:
         raise RecordNotFoundVersioningError() from e
 
-    version_master = PIDVersioning(child=child_pid)
+    version_master = PIDNodeVersioning(child=child_pid)
 
     prev_pid = version_master.last_child
     assert prev_pid.pid_type == RecordUUIDProvider.pid_type

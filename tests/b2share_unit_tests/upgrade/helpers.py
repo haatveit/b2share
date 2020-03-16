@@ -38,7 +38,7 @@ from b2share.modules.upgrade.cli import run
 from invenio_accounts.models import User
 from invenio_records_files.api import Record
 from invenio_pidstore.models import PersistentIdentifier, PIDStatus
-from invenio_pidrelations.contrib.versioning import PIDVersioning
+from invenio_pidrelations.contrib.versioning import PIDNodeVersioning
 from b2share.modules.records.fetchers import b2share_parent_pid_fetcher, \
     b2share_record_uuid_fetcher
 from b2share.modules.records.providers import RecordUUIDProvider
@@ -102,7 +102,7 @@ def check_records_migration(app):
         fetched_pid = b2share_record_uuid_fetcher(exp_record['id'], db_record)
         record_pid = PersistentIdentifier.get(fetched_pid.pid_type,
                                               fetched_pid.pid_value)
-        assert PIDVersioning(record_pid).parent.pid_value == parent_pid.pid_value
+        assert PIDNodeVersioning(record_pid).parent.pid_value == parent_pid.pid_value
         # Remove the parent pid as it has been added by the migration
         db_record['_pid'].remove({
             'type': RecordUUIDProvider.parent_pid_type,
@@ -157,7 +157,7 @@ def check_pids_migration():
                 continue
 
             # Check that a parent pid has been created
-            versioning = PIDVersioning(child=rec_pid)
+            versioning = PIDNodeVersioning(child=rec_pid)
             parent = versioning.parent
             assert rec_pid.status in [PIDStatus.RESERVED, PIDStatus.REGISTERED]
             if rec_pid.status == PIDStatus.RESERVED:

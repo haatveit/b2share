@@ -34,7 +34,7 @@ from invenio_db import db
 from invenio_pidstore.resolver import Resolver
 from invenio_pidstore.errors import PIDDoesNotExistError, PIDRedirectedError
 from invenio_pidstore.models import PersistentIdentifier
-from invenio_pidrelations.contrib.versioning import PIDVersioning
+from invenio_pidrelations.contrib.versioning import PIDNodeVersioning
 from invenio_pidrelations.models import PIDRelation
 from invenio_records_files.api import Record
 from invenio_rest.errors import RESTValidationError
@@ -406,7 +406,7 @@ class RecordsVersionsResource(ContentNegotiatedMethodView):
 
         pid_value = request.view_args['pid_value']
         pid = RecordUUIDProvider.get(pid_value).pid
-        pid_versioning = PIDVersioning(child=pid)
+        pid_versioning = PIDNodeVersioning(child=pid)
         if pid_versioning.is_child:
             # This is a record PID. Retrieve the parent versioning PID.
             version_parent_pid_value = pid_versioning.parent.pid_value

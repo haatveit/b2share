@@ -40,7 +40,7 @@ from invenio_files_rest.models import ObjectVersion
 from invenio_records_files.api import Record
 from invenio_pidstore.resolver import Resolver
 from invenio_pidstore.models import PersistentIdentifier
-from invenio_pidrelations.contrib.versioning import PIDVersioning
+from invenio_pidrelations.contrib.versioning import PIDNodeVersioning
 from b2share.modules.records.api import B2ShareRecord
 from b2share.modules.deposit.api import Deposit
 
@@ -74,7 +74,7 @@ def test_deposit_create_versions(app, test_records_data, test_users,
     # try to create a new version from a parent pid
     with app.app_context():
         v1_pid = PersistentIdentifier.get(pid_value=v1_rec['id'], pid_type='b2rec')
-        parent_pid = PIDVersioning(child=v1_pid).parent
+        parent_pid = PIDNodeVersioning(child=v1_pid).parent
     res, json_data = create(app, login, data[1],
                             version_of=parent_pid.pid_value)
     assert res.status_code == 400

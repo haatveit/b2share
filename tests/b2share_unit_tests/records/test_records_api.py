@@ -41,7 +41,7 @@ from b2share.modules.records.api import B2ShareRecord
 from b2share.modules.deposit.api import Deposit, copy_data_from_previous
 from b2share.modules.deposit.minters import b2share_deposit_uuid_minter
 from b2share_unit_tests.helpers import create_deposit, pid_of
-from invenio_pidrelations.contrib.versioning import PIDVersioning
+from invenio_pidrelations.contrib.versioning import PIDNodeVersioning
 
 
 def test_change_record_schema_fails(app, test_records):
@@ -140,8 +140,8 @@ def test_record_delete_version(app, test_records, test_users):
         v3_pid, v3_id = pid_of(v3)
         v3_pid, v3_rec = resolver.resolve(v3_pid.pid_value)
         # chain is now: [v1] -- [v2] -- [v3]
-        version_child = PIDVersioning(child=v2_pid)
-        version_master = PIDVersioning(parent=version_child.parent)
+        version_child = PIDNodeVersioning(child=v2_pid)
+        version_master = PIDNodeVersioning(parent=version_child.parent)
         assert len(version_master.children.all()) == 3
         v3_rec.delete()
         assert len(version_master.children.all()) == 2

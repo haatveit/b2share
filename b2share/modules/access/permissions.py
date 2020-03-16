@@ -27,7 +27,7 @@ import json
 
 from flask_principal import Permission, Need
 from invenio_access.permissions import (
-    DynamicPermission, ParameterizedActionNeed,
+    Permission, ParameterizedActionNeed,
 )
 
 
@@ -68,7 +68,7 @@ def authenticated_only(*args, **kwargs):
    and authenticated users.
 """
 
-class StrictDynamicPermission(DynamicPermission):
+class StrictDynamicPermission(Permission):
     """Stricter DynamicPermission.
 
     It adds the given needs to the returned needs instead of using only

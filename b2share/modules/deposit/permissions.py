@@ -32,7 +32,7 @@ from functools import partial
 from jsonpatch import apply_patch
 from flask_principal import UserNeed
 from invenio_access.permissions import (
-    superuser_access, ParameterizedActionNeed, DynamicPermission
+    superuser_access, ParameterizedActionNeed, Permission
 )
 from invenio_access.models import ActionUsers, ActionRoles
 from flask_security import current_user
@@ -225,7 +225,7 @@ class ReadDepositPermission(DepositPermission):
             community=self.deposit['community'],
             publication_state=self.deposit['publication_state'],
         ))
-        permission = DynamicPermission(*needs)
+        permission = Permission(*needs)
         self.permissions.add(permission)
 
 

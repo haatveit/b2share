@@ -69,7 +69,7 @@ def authenticated_only(*args, **kwargs):
 """
 
 class StrictDynamicPermission(Permission):
-    """Stricter DynamicPermission.
+    """Stricter Permission.
 
     It adds the given needs to the returned needs instead of using only
     those found in the database.
@@ -79,7 +79,7 @@ class StrictDynamicPermission(Permission):
             database. Thus the action is not allowed by default.
 
     NOTE: This could be deprecated as the current version of invenio-access'
-    DynamicPermission class forbids by default instead of allowing.
+    Permission class forbids by default instead of allowing.
     """
     def __init__(self, *needs):
         self.explicit_excludes = set()

@@ -25,7 +25,7 @@
 from functools import partial
 
 from invenio_access.permissions import (
-    superuser_access, ParameterizedActionNeed, DynamicPermission
+    superuser_access, ParameterizedActionNeed, Permission
 )
 from invenio_db import db
 from invenio_files_rest.models import Bucket, MultipartObject, ObjectVersion
@@ -90,7 +90,7 @@ def files_permission_factory(obj, action=None):
             elif is_deposit(record.model):
                 return DepositFilesPermission(record, action)
 
-    return DynamicPermission(superuser_access)
+    return Permission(superuser_access)
 
 
 class RecordFilesPermission(OrPermissions):

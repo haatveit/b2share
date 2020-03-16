@@ -26,7 +26,7 @@
 from .loader import register_permissions_loader
 # FIXME: this is only needed because we don't use oauth2server's
 # server blueprint. Remove this once we integrate it.
-from invenio_oauth2server.views.server import login_oauth2_user
+from invenio_oauth2server.provider import login_oauth2_user
 
 
 class B2ShareAccess(object):

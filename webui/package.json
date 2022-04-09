@@ -38,7 +38,7 @@
     "fast-json-patch": "^0.5.6",
     "font-awesome": "^4.4.0",
     "immutable": "^3.7.6",
-    "moment": "^2.13.0",
+    "moment": "^2.29.2",
     "pluralize": "^1.2.1",
     "react": "^15.5.0",
     "react-dom": "^15.5.0",
